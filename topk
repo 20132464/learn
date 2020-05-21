@@ -1,0 +1,48 @@
+# -----------------------------------------------
+def topk(nums,m,n,k):
+    key=m
+    left=m
+    right=n
+    while left<right:
+        while left<right and nums[right]>nums[key]:
+            right-=1
+        while left<right and nums[left]<=nums[key]:
+            left+=1
+        nums[left],nums[right]=nums[right],nums[left]
+    nums[m],nums[left]=nums[left],nums[m]
+    if left == k:
+        return nums[:left]
+    if left < k:
+        return topk(nums,right+1,n,k)
+    else:
+        return topk(nums,m,left,k)
+topk([2,5,1,7,0,3,9,4,6],0,8,4)   
+# ----------------------------------------------------
+# 用大顶堆做topk
+def down(nums, ind, n):
+    while ind * 2 + 1 < n:
+        left = ind * 2 + 1
+        right = ind * 2 + 2
+        if nums[ind] >= nums[left] and (right >= n or nums[ind] >= nums[right]):
+            return
+        elif nums[left] > nums[ind] and right >= n or nums[left] >= nums[right]:
+            nums[ind], nums[left] = nums[left], nums[ind]
+            ind = left
+        else:
+            nums[ind], nums[right] = nums[right], nums[ind]
+            ind = right
+def build(nums):
+    n = len(nums)
+    for i in range(n // 2 - 1, -1, -1):
+        down(nums, i, n)
+def rebuild(nums, k):
+    n = len(nums)
+    build(nums)
+    for i in range(n):
+        nums[0], nums[n - i - 1] = nums[n - i - 1], nums[0]
+        down(nums, 0, n - 1 - i)
+        if n-i-1==k:
+            return nums[-k:]
+    return nums
+rebuild([2,5,1,7,0,3,9,4,6],4)
+--------------------------------------------
