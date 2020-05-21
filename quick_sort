@@ -1,4 +1,6 @@
 # 快排的几种写法
+# 注意事项① 以最左边为基准时，要先从右边开始走 具体说明 可见 https://blog.csdn.net/zcpvn/article/details/78150692
+# 注意事项② python数组在递归时，并不会变，具体可看最后一个例子
 ----------------------------
 def quick_sort(nums, head, tail):
     left = head
