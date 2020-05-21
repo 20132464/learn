@@ -1,0 +1,54 @@
+#大顶堆
+def down(nums, ind, n):
+    while ind * 2 + 1 < n:
+        left = ind * 2 + 1
+        right = ind * 2 + 2
+        if nums[ind] >= nums[left] and (right >= n or nums[ind] >= nums[right]):
+            return
+        elif nums[left] > nums[ind] and right >= n or nums[left] >= nums[right]:
+            nums[ind], nums[left] = nums[left], nums[ind]
+            ind = left
+        else:
+            nums[ind], nums[right] = nums[right], nums[ind]
+            ind = right
+def build(nums):
+    n = len(nums)
+    for i in range(n // 2 - 1, -1, -1):
+        down(nums, i, n)
+def rebuild(nums, k):
+    n = len(nums)
+    build(nums)
+    for i in range(n):
+        nums[0], nums[n - i - 1] = nums[n - i - 1], nums[0]
+        down(nums, 0, n - 1 - i)
+    return nums
+rebuild([2,5,1,7,0,3,9,4,6],4)
+-------------------------------------------------
+# 归并
+def merge(p, q):
+    res = []
+    a, b = 0, 0
+    m, n = len(p), len(q)
+    while a < m and b < n:
+        if p[a] <= q[b]:
+            res.append(p[a])
+            a += 1
+            
+        else:
+            res.append(q[b])
+            b += 1
+            
+    if a < m:
+        res += p[a:]
+    if b < n:
+        res += q[b:]
+    return res
+def merge_sort(nums):
+    n = len(nums)
+    if n == 0:
+        return []
+    if n == 1:
+        return nums
+    return merge(merge_sort(nums[:n//2]),merge_sort(nums[n//2:]))
+merge_sort([2,5,1,7,0,3,9,4,6])
+---------------------------------------
