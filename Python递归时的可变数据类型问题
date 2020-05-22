@@ -1,0 +1,77 @@
+用c语言实现递归的时候，无论是单个变量还是数组变量，当进入递归时，变量被压栈，退出递归时，变量出栈，这没有问题。
+但是在python中，整型变量是不可变数据类型，这和c语言完全一样，但是list，ndarray等都是可变数据类型，无法保存每层的数组变量！
+这个也解释了之前快排最后一种写法错误的原因
+---------------------------
+import numpy as np
+def test(a,x):
+	if a==3:
+		return
+	a=a+1
+	x[0]=x[0]+1
+	print(a,x)#进入递归
+	test(a,x)
+	print(a,x)#退出递归
+	return
+a=0	
+x=np.zeros(4)
+test(a,x)
+---------------------------
+输出结果：
+1 [1. 0. 0. 0.]
+2 [2. 0. 0. 0.]
+3 [3. 0. 0. 0.]
+3 [3. 0. 0. 0.]
+2 [3. 0. 0. 0.]
+1 [3. 0. 0. 0.]
+---------------------------
+可以很明显的看到，每层的整型变量数值都保存了，数组变量没有。
+再比如：
+def combine(l_date, n, m, l_output, result):
+    for i in range(n, m - 1, -1):
+        l_output[m - 1] = l_date[i - 1]
+        if m > 1:
+            combine(l_date, i - 1, m - 1, l_output, result)
+        else:
+            print l_output
+            result.append(l_output)
+ 
+result = []
+l_output = [0]*2
+list_date = [0, 1, 2]
+combine(list_date, 3, 2, l_output, result)
+print result
+-----------------------------
+输出结果：
+[1, 2]
+[0, 2]
+[0, 1]
+[[0, 1], [0, 1], [0, 1]]
+-------------------------------
+上述代码改为：
+def combine(l_date, n, m, l_output, result):
+    for i in range(n, m - 1, -1):
+        l_output[m - 1] = l_date[i - 1]
+        if m > 1:
+            combine(l_date, i - 1, m - 1, l_output, result)
+        else:
+            print l_output
+            res = l_output[:]
+            result.append(res)
+ 
+result = []
+l_output = [0]*2
+list_date = [0, 1, 2]
+combine(list_date, 3, 2, l_output, result)
+print result
+-------------------------
+输出结果为：
+[1, 2]
+[0, 2]
+[0, 1]
+[[1, 2], [0, 2], [0, 1]]
+-------------------------
+分析：
+递归的时候变量都保存在栈里，result里面存的是l_output的地址。但是，当递归函数运行结束，l_output就被pop掉了。
+
+[]是引用 传址调用
+[:] 是复制 传值调用
