@@ -112,3 +112,57 @@ http://wsfdl.com/python/2013/08/16/%E7%90%86%E8%A7%A3Python%E7%9A%84%E6%B7%B1%E6
 这个里的图画的特别好，通过画图很容易理解
 https://zhuanlan.zhihu.com/p/57893374
 这篇图解也较好
+-----------------------------
+import copy
+
+a = ["张小鸡"]
+
+print "改变前，a内部的元素id：id([a])->>>", [id(_) for _ in a]
+
+c = copy.copy(a)
+
+print "改变前，浅拷贝c内部的元素id：id([c])->>>", [id(_) for _ in c]
+
+a[0] = "姬无命"
+
+print "改变后，a内部的元素id：id([a])->>>", [id(_) for _ in a]
+print "改变后，浅拷贝c内部的元素id：id([c])->>>", [id(_) for _ in c]
+输出：
+改变前，a内部的元素id：id([a])->>> [4318150256]
+改变前，浅拷贝c内部的元素id：id([c])->>> [4318150256]
+改变后，a内部的元素id：id([a])->>> [4318150352]
+改变后，浅拷贝c内部的元素id：id([c])->>> [4318150256]
+！[理解图1](https://github.com/20132464/learn/blob/master/1.jpg）
+---------------------------------------
+操作不可变对象时，由于引用计数的特性，被拷贝的元素改变时，就相当于撕掉了原来的标签，重新贴上新的标签一样，对于我们已拷贝的元素没有任何影响。
+因此在操作不可变对象时，浅拷贝和深拷贝是没有区别的
+import copy
+import json
+
+a = [["张小鸡"], "姬无命"]
+
+print "改变前，a的值", json.dumps(a, ensure_ascii=False)
+print "改变前，a内部的元素id：id([a])->>>", [id(_) for _ in a]
+
+c = copy.copy(a)
+
+print "改变前，c的值", json.dumps(c, ensure_ascii=False)
+print "改变前，浅拷贝c内部的元素id：id([c])->>>", [id(_) for _ in c]
+
+a[0][0] = "Tom"
+a[1] = "Jack"
+
+print "改变后，a的值", json.dumps(a, ensure_ascii=False)
+print "改变后，c的值", json.dumps(c, ensure_ascii=False)
+print "改变后，a内部的元素id：id([a])->>>", [id(_) for _ in a]
+print "改变后，浅拷贝c内部的元素id：id([c])->>>", [id(_) for _ in c]
+输出：
+改变前，a的值 [["张小鸡"], "姬无命"]
+改变前，a内部的元素id：id([a])->>> [4385503208, 4373939232]
+改变前，c的值 [["张小鸡"], "姬无命"]
+改变前，浅拷贝c内部的元素id：id([c])->>> [4385503208, 4373939232]
+改变后，a的值 [["Tom"], "Jack"]
+改变后，c的值 [["Tom"], "姬无命"]
+改变后，a内部的元素id：id([a])->>> [4385503208, 4373938320]
+改变后，浅拷贝c内部的元素id：id([c])->>> [4385503208, 4373939232]
+！[理解图2](https://github.com/20132464/learn/blob/master/2.jpg)
