@@ -1,4 +1,5 @@
 #大顶堆
+https://www.cnblogs.com/chengxiao/p/6129630.html 图解堆排
 def down(nums, ind, n):
     while ind * 2 + 1 < n:
         left = ind * 2 + 1
