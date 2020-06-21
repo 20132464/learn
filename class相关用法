@@ -1,0 +1,23 @@
+#总不理解的class，话不多说，先上自己写的代码
+class HHH(object):
+    def __init__(self, mingzi, nianling):
+        self.name = mingzi
+        self.age = nianling
+    def my_dingyi(self, a):
+        print([self.name, self.age])
+        print(a + 2)
+        print(self.name + 'is a beauty')
+zyj = HHH('zhaoyiguo', 18)
+zyj.my_dingyi(3)
+输出：
+['zhaoyiguo', 18]
+5
+zhaoyiguois a beauty
+--------------------------------
+所以可以看出，很多示例中的 self.name = name,这两个name并不一定要相同，self.name是类中的属性，是个全局变量，而=后面的name是初始函数的啥呢，没找到一个
+合适的词，总之两者不一定要一样，链表或二叉树的定义如下：
+class Node:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
